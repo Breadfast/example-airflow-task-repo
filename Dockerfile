@@ -19,8 +19,9 @@ COPY ./requirements ./requirements
 
 COPY --chown=${USERNAME} ./src ./src
 
-RUN pip install --upgrade pip && \
-    pip install keyrings.google-artifactregistry-auth==1.1.2
+RUN pip install --upgrade pip 
+# This step is required when having a dependency on a python package hosted on google artifact registry
+# RUN pip install keyrings.google-artifactregistry-auth==1.1.2
 
 RUN pip install -r ./requirements/base.txt
 
