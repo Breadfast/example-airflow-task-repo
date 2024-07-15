@@ -5,7 +5,6 @@ steps:
     'build',
     '--network', 'cloudbuild',
     '--build-arg','USERNAME=${_USERNAME}'
-    '--target','${_ENV}',
     '-t', '${_LOCATION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE}',
     '.'
   ]
@@ -15,5 +14,4 @@ substitutions:
   _LOCATION: europe-north1
   _REPOSITORY: bf-data-apps-images
   _IMAGE: example-airflow-task-repo
-  _ENV: prod
   _USERNAME: prod-user
