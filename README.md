@@ -10,11 +10,32 @@ This repo is aimed to be a template for creating an airflow task (*can be extend
 4. Template [`src/task.py`](src/task.py) file for writing the main python code.
 5. Template [`local-startup.sh`](local-startup.sh) file for setting up the local environment for local testing.
 6. Template [`Dockerfile`](Dockerfile) for building the repo as Docker image.
-7. Template [`cloudbuild.yaml`](cloudbuild.yaml) that references [`Dockerfile`](Dockerfile) and build this Dockerfile into a Docker image then pushes it to our Google Artifact Registry. 
+7. Template [`docker-compose.yaml`](docker-compose.yaml) for running the docker image.
+8. Template [`cloudbuild.yaml`](cloudbuild.yaml) that references [`Dockerfile`](Dockerfile) and build this Dockerfile into a Docker image then pushes it to our Google Artifact Registry. 
 
 ## Usage
 
 To use this template repo you can clone it locally. Then copy/paste it elsewhere, rename it, edit it as fits your needs.
+
+## Local Development
+
+To Run [`src/task.py`](src/task.py) follow these steps:
+
+1. Build the Docker image
+    ```bash
+    docker build . -t <your-image-name>
+    ```
+2. Change the image name in the [`docker-compose.yaml`](docker-compose.yaml) to match \<your-image-name\> here:
+    ```yaml
+    services:
+        app:
+            image: <your-image-name>
+    ```
+
+3. Run the docker image through docker compose
+    ```bash
+    docker compose up
+    ```
 
 ## Additional Steps for Local Testing when using GCP Libraries
 
@@ -37,14 +58,16 @@ Installing a private registry requires an additional step. This step is to add a
 
 You can find a guide ot install `pybq` package [here](https://github.com/Breadfast/pybq/blob/main/README.md). 
 
-You can find the steps to install such package abstracted and *commented out* in :
-1. [`local-startup.sh`](local-startup.sh)
-2. [`Dockerfile`](Dockerfile)
-3. [`requirements/base.txt`](requirements/base.txt)
+To use a private python package:
+1. **Uncomment** the related lines in [`Dockerfile`](Dockerfile)
+2. **Uncomment** the related lines in [`requirements/base.txt`](requirements/base.txt)
+3. **Edit** step 1 [here](#local-development) to 
+    ```bash
+    docker build --build-arg EXTRA_INDEX_URL=https://oauth2accesstoken:$(gcloud auth print-access-token)@europe-north1-python.pkg.dev/followbreadfast/bf-data-py-packages/simple/
+    ```
 
-For local testing run the commented lines in [`local-startup.sh`](local-startup.sh). 
 
-For deployment don't forget to **uncomment** the relevant lines in [`Dockerfile`](Dockerfile) and [`requirements/base.txt`](requirements/base.txt).
+
 
 ## How to Run a .sh file 
 
