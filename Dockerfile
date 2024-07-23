@@ -28,16 +28,10 @@ COPY --chown=${USERNAME} ./src ./src
 
 RUN pip install --upgrade pip 
 
-# UNCOMMENT this when having a dependency on a python package hosted on google artifact registry e.g. pybq
-# RUN pip install keyrings.google-artifactregistry-auth==1.1.2
+RUN pip install keyrings.google-artifactregistry-auth==1.1.2
 
 
-RUN pip install \
-\
-# UNCOMMENT this when having a dependency on a python package hosted on google artifact registry e.g. pybq
-#  --extra-index-url $EXTRA_INDEX_URL\
-\
-  -r ./requirements/base.txt
+RUN pip install --extra-index-url $EXTRA_INDEX_URL -r ./requirements/base.txt
 
 USER ${USERNAME}
 
