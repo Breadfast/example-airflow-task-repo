@@ -1,10 +1,14 @@
 steps:
-- id: Build Image
-  name: 'gcr.io/cloud-builders/docker'
-  args: ['build --target ${_ENV} --build-arg USERNAME=${_USERNAME} --network cloudbuild -t ${_LOCATION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE}:${_ENV} .']
-- id: Push Image
-  name: 'gcr.io/cloud-builders/docker'
-  args: ['push','${_LOCATION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE}:${_ENV}']
+- name: 'gcr.io/kaniko-project/executor:latest'
+  args:
+  - --build-arg="USERNAME=${_USERNAME}"
+  - --target=${_ENV}
+  - --destination=${_LOCATION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE}:${_ENV}
+  - --cache=true
+  - --cache-ttl=6h
+  - --skip-unused-stages
+
+
 substitutions:
   _LOCATION: europe-north1
   _REPOSITORY: bf-data-apps-images
