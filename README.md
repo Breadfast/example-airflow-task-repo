@@ -11,7 +11,8 @@ This repo is aimed to be a template for creating an airflow task (*can be extend
 5. Template [`Dockerfile`](Dockerfile) for building the repo as Docker image.
 6. Template [`docker-compose.yaml`](docker-compose.yaml) for running the docker image.
 7. Template [`cloudbuild.yaml`](cloudbuild.yaml) that references [`Dockerfile`](Dockerfile) and build this Dockerfile into a Docker image then pushes it to our Google Artifact Registry. 
-8. [`.env.sample`](.env.sample) file containing needed environment variables to be set when running locally with Docker. 
+8. Template [`scripts`](scripts/) folder for spinning up and down docker containers of the development environment
+9. [`.env.sample`](.env.sample) file containing needed environment variables to be set when running locally with Docker. 
 ## Usage
 
 To use this template repo you can clone it locally. Then *copy/paste* it elsewhere, *rename* it and *edit* it as fits your needs.
@@ -25,21 +26,15 @@ To Run [`src/task.py`](src/task.py) follow these steps:
 
 1. Copy [`.env.sample`](.env.sample) file into a new `.env` file and set the included environment variables.
 
-2. Build the Docker image
+2. Build the Docker image and run the container 
     ```bash
-    docker build --build-arg EXTRA_INDEX_URL=https://oauth2accesstoken:$(gcloud auth print-access-token)@europe-north1-python.pkg.dev/followbreadfast/bf-data-py-packages/simple/ . -t <your-image-name>
+    . scripts/dev/start-docker.bash
     ```
-3. Change the image name in the [`docker-compose.yaml`](docker-compose.yaml) to match \<your-image-name\> here:
-    ```yaml
-    services:
-        app:
-            image: <your-image-name>
-    ```
-
-4. Run the docker image through docker compose
+3. Stop the container when needed
     ```bash
-    docker compose up
+    . scripts/dev/start-docker.bash
     ```
+    
 
 ### Running without Docker
 

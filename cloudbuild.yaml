@@ -1,19 +1,13 @@
 steps:
-- id: Build
+- id: Build Image
   name: 'gcr.io/cloud-builders/docker'
-  args: [
-    'build',
-    '--network', 'cloudbuild',
-    '--build-arg','USERNAME=${_USERNAME}',
-    '--build-arg','EXTRA_INDEX_URL=${_EXTRA_INDEX_URL}',
-    '-t', '${_LOCATION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE}',
-    '.'
-  ]
-images:
-- '${_LOCATION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE}'
+  args: ['build --target ${_ENV} --build-arg USERNAME=${_USERNAME} --network cloudbuild -t ${_LOCATION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE}:${_ENV} .']
+- id: Push Image
+  name: 'gcr.io/cloud-builders/docker'
+  args: ['push','${_LOCATION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE}:${_ENV}']
 substitutions:
   _LOCATION: europe-north1
   _REPOSITORY: bf-data-apps-images
   _IMAGE: example-airflow-task-repo
   _USERNAME: prod-user
-  _EXTRA_INDEX_URL: https://europe-north1-python.pkg.dev/followbreadfast/bf-data-py-packages/simple/
+  _ENV: prod

@@ -1,6 +1,4 @@
-FROM python:3.10.8-slim-buster AS base
-
-ARG EXTRA_INDEX_URL= 
+FROM python:3.10.8-slim-buster AS baseimg
 
 ARG USERNAME=localtest
 
@@ -30,10 +28,23 @@ RUN pip install --upgrade pip
 
 RUN pip install keyrings.google-artifactregistry-auth==1.1.2
 
+FROM baseimg AS prod
 
+RUN pip install -r ./requirements/base.txt
+
+USER ${USERNAME}
+
+
+FROM baseimg AS dev
+
+ARG EXTRA_INDEX_URL
 RUN pip install --extra-index-url $EXTRA_INDEX_URL -r ./requirements/base.txt
 
 USER ${USERNAME}
+
+
+
+
 
 
 

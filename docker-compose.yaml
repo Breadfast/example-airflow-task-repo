@@ -1,8 +1,11 @@
-version: '3'
 
 services:
   app:
-    image: <your-image-name>
+    build: 
+      context: .
+      target: dev
+      args:
+        EXTRA_INDEX_URL: ${EXTRA_INDEX_URL}
     command: ["python","src/task.py"]
     environment:
       - GOOGLE_APPLICATION_CREDENTIALS=/home/localtest/.config/gcloud/application_default_credentials.json
