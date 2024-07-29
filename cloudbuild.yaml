@@ -1,17 +1,17 @@
 steps:
-- id: Build
-  name: 'gcr.io/cloud-builders/docker'
-  args: [
-    'build',
-    '--network', 'cloudbuild',
-    '--build-arg','USERNAME=${_USERNAME}'
-    '-t', '${_LOCATION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE}',
-    '.'
-  ]
-images:
-- '${_LOCATION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE}'
+- name: 'gcr.io/kaniko-project/executor:latest'
+  args:
+  - --build-arg="USERNAME=${_USERNAME}"
+  - --target=${_ENV}
+  - --destination=${_LOCATION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE}:${_ENV}
+  - --cache=true
+  - --cache-ttl=6h
+  - --skip-unused-stages
+
+
 substitutions:
   _LOCATION: europe-north1
   _REPOSITORY: bf-data-apps-images
   _IMAGE: example-airflow-task-repo
   _USERNAME: prod-user
+  _ENV: prod

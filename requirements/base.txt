@@ -1,2 +1,2 @@
-# --extra-index-url=https://europe-north1-python.pkg.dev/followbreadfast/bf-data-py-packages/simple/
-# pybq==0.4.2
+--extra-index-url https://europe-north1-python.pkg.dev/followbreadfast/bf-data-py-packages/simple
+pybq==0.4.2

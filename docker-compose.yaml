@@ -1,0 +1,16 @@
+
+services:
+  app:
+    build: 
+      context: .
+      target: dev
+      args:
+        EXTRA_INDEX_URL: ${EXTRA_INDEX_URL}
+    command: ["python","src/task.py"]
+    environment:
+      - GOOGLE_APPLICATION_CREDENTIALS=/home/localtest/.config/gcloud/application_default_credentials.json
+      - GOOGLE_CLOUD_PROJECT=${GOOGLE_CLOUD_PROJECT}
+    volumes:
+      - ./src:/home/localtest/src
+      - ${GOOGLE_APPLICATION_CREDENTIALS_PATH}:/home/localtest/.config/gcloud
+
